@@ -2,7 +2,8 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+*.class
+target
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -27,3 +28,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Zed ###
+.zed
