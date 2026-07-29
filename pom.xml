@@ -24,47 +24,34 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.13.0</version>
-        </plugin>
-        <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.2</version>
-                <executions>
-                  <execution>
-                    <phase>package</phase>
-                    <goals>
-                      <goal>shade</goal>
-                    </goals>
-                    <configuration>
-                      <transformers>
-                        <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"
-                                    >
-                          <mainClass>me.chip.bank.Main</mainClass>
-                        </transformer>
-                      </transformers>
-                    </configuration>
-                  </execution>
-                </executions>
-              </plugin>
-              <plugin>
-                          <groupId>org.apache.maven.plugins</groupId>
-                          <artifactId>maven-jar-plugin</artifactId>
-                          <configuration>
-                              <archive>
-                                  <manifest>
-                                      <mainClass>me.chip.bank.Main</mainClass>
-                                  </manifest>
-                              </archive>
-                          </configuration>
-                      </plugin>
-      </plugins>
-    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+      </plugin>
+
+      <!-- The Shade plugin creates an uber-JAR with sqlite-jdbc bundled inside -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>me.chip.bank.Main</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
