@@ -14,7 +14,7 @@ public class SQLite {
         initDB();
     }
 
-    public boolean execute(String sql) {
+    public void execute(String sql) {
         try (
             Connection conn = DriverManager.getConnection(this.url);
             Statement stmt = conn.createStatement()
@@ -24,7 +24,7 @@ public class SQLite {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return false;
+   
     }
 
     public void initDB() {
