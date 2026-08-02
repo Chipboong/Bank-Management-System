@@ -3,7 +3,7 @@ package me.chip.bank;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+import javafx.application.Application;
 public class Login extends JFrame implements ActionListener {
 
     Login() {

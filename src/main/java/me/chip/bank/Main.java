@@ -2,6 +2,7 @@ package me.chip.bank;
 
 import me.chip.bank.Bank.ChipBank;
 import me.chip.bank.Bank.NeathBank;
+import me.chip.bank.Login;
 
 public class Main {
 
@@ -10,5 +11,6 @@ public class Main {
         System.out.println(new java.io.File("bank_db").getAbsolutePath());
         ChipBank chip = new ChipBank("ChipBank", "1");
         NeathBank neath = new NeathBank("NeathBank", "2");
+        Login login = new Login();
     }
 }

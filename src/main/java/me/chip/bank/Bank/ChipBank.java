@@ -13,17 +13,12 @@ public class ChipBank implements Bank {
     @Override
     public String getBankName() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'getBankName'"
-        );
+        return this.bankName;
     }
 
     @Override
     public String getBankID() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'getBankID'"
-        );
+        return this.bankId;
     }
 
     @Override
