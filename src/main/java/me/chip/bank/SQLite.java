@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SQLite {
+public class SQLite{
 
     String url;
 
@@ -19,6 +19,9 @@ public class SQLite {
             Connection conn = DriverManager.getConnection(this.url);
             Statement stmt = conn.createStatement()
         ) {
+            if (conn != null) {
+                System.out.println("Connected to SQLite");
+            }
             // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -66,5 +69,6 @@ public class SQLite {
             "    FOREIGN KEY (toAccountID) REFERENCES account(accountID) " +
             ");";
             execute(sql);
+            System.out.println("testing");
     }
 }
