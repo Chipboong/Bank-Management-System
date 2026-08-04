@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SQLite{
+public class SQLite {
 
     String url;
 
@@ -19,28 +19,27 @@ public class SQLite{
             Connection conn = DriverManager.getConnection(this.url);
             Statement stmt = conn.createStatement()
         ) {
-            if (conn != null) {
-                System.out.println("Connected to SQLite");
-            }
-            // create a new table
+
+
+            stmt.execute("PRAGMA foreign_keys = ON;");
             stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-   
     }
 
     public void initDB() {
         String sql =
-            "PRAGMA foreign_keys = ON; " +
             "CREATE TABLE IF NOT EXISTS bank (" +
             "    bankID INTEGER PRIMARY KEY, " +
             "    name TEXT NOT NULL " +
-            "); " +
+            "); ";
+        String user =
             "CREATE TABLE IF NOT EXISTS user (" +
             "    userID INTEGER PRIMARY KEY, " +
             "    userName TEXT NOT NULL " +
-            "); " +
+            "); ";
+        String account =
             "CREATE TABLE IF NOT EXISTS account (" +
             "    accountID TEXT PRIMARY KEY, " +
             "    balance REAL NOT NULL DEFAULT 0.0, " +
@@ -49,7 +48,8 @@ public class SQLite{
             "    FOREIGN KEY (bankID) REFERENCES bank(bankID), " +
             "    FOREIGN KEY (userID) REFERENCES user(userID), " +
             "    UNIQUE (bankID, userID) " +
-            "); " +
+            "); ";
+        String account_log =
             "CREATE TABLE IF NOT EXISTS account_log (" +
             "    logID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "    transactionType TEXT NOT NULL CHECK(transactionType IN ('DEPOSIT', 'WITHDRAW', 'TRANSFER')), " +
@@ -68,7 +68,10 @@ public class SQLite{
             "    FOREIGN KEY (toUserID) REFERENCES user(userID), " +
             "    FOREIGN KEY (toAccountID) REFERENCES account(accountID) " +
             ");";
-            execute(sql);
-            System.out.println("testing");
+        execute(sql);
+        execute(user);
+        execute(account);
+        execute(account_log);
+
     }
 }
