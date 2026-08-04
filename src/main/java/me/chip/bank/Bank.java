@@ -1,12 +1,12 @@
-package me.chip.bank.Bank;
+package me.chip.bank;
 
 public interface Bank {
     String getBankName();
     String getBankID();
 
-    String register(String username);
+    void register(String username);
 
-    void deposit(String accountId, double amount);
+    void deposit(Account account, double amount);
 
     double withdraw(String accountId, double amount);
 

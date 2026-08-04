@@ -1,8 +1,8 @@
-package me.chip.bank.Bank;
+package me.chip.bank;
 
 public class Account extends ChipBank
 {
-    private String accountHolderName;
+    private final String accountHolderName;
     private String accountNumber;
     private double balance;
 
@@ -10,6 +10,13 @@ public class Account extends ChipBank
         super("ChipBank","112");
         this.accountHolderName = name;
     }
+
+    public double getBalance() {
+        return this.balance;
+    }
+
+
+
 
 
 

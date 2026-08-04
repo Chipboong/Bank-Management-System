@@ -23,7 +23,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>me.chip.bank.Main</mainClass>
+                  <mainClass>me.chip.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>

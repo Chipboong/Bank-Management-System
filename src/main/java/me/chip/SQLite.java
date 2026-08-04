@@ -1,4 +1,4 @@
-package me.chip.bank;
+package me.chip;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,16 +7,15 @@ import java.sql.Statement;
 
 public class SQLite {
 
-    String url;
+   private static final String url = "jdbc:sqlite:bank_db.sqlite";
 
-    SQLite(String URL) {
-        this.url = URL;
+    SQLite() {
         initDB();
     }
 
     public void execute(String sql) {
         try (
-            Connection conn = DriverManager.getConnection(this.url);
+            Connection conn = getConnection();
             Statement stmt = conn.createStatement()
         ) {
 
@@ -73,5 +72,15 @@ public class SQLite {
         execute(account);
         execute(account_log);
 
+    }
+
+    public static Connection getConnection() {
+        try(Connection conn = DriverManager.getConnection(this.url)){
+            if (conn != null) {
+                return conn;
+            }
+        } catch(SQLException e ){
+            System.out.println(e);
+        }
     }
 }

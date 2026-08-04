@@ -1,10 +1,14 @@
-package me.chip.bank.Bank;
+package me.chip.bank;
+
+import me.chip.SQLite;
+
+import java.sql.Connection;
 
 public class ChipBank implements Bank {
 
     final String bankName;
     final String bankId;
-
+    final String url = "jdbc:sqlite:bank_db.sqlite";
     public ChipBank(String bankName, String bankId) {
         this.bankName = bankName;
         this.bankId = bankId;
@@ -12,7 +16,6 @@ public class ChipBank implements Bank {
 
     @Override
     public String getBankName() {
-        // TODO Auto-generated method stub
         return this.bankName;
     }
 
@@ -22,15 +25,13 @@ public class ChipBank implements Bank {
     }
 
     @Override
-    public String register(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'register'"
-        );
+    public void register(String username) {
+        String reg = "";
+
     }
 
     @Override
-    public void deposit(String accountId, double amount) {
+    public void deposit(Account account, double amount) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException(
             "Unimplemented method 'deposit'"
@@ -40,9 +41,12 @@ public class ChipBank implements Bank {
     @Override
     public double withdraw(String accountId, double amount) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'withdraw'"
-        );
+        String
+       try(Connection conn = SQLite.getConnection()){
+           if (conn != null){
+
+           }
+       }
     }
 
     @Override
