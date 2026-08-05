@@ -19,7 +19,6 @@ public class SQLite {
             Statement stmt = conn.createStatement()
         ) {
 
-
             stmt.execute("PRAGMA foreign_keys = ON;");
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -40,10 +39,10 @@ public class SQLite {
             "); ";
         String account =
             "CREATE TABLE IF NOT EXISTS account (" +
-            "    accountID TEXT PRIMARY KEY, " +
+            "    accountID VARCHAR(10) PRIMARY KEY, " +
             "    balance REAL NOT NULL DEFAULT 0.0, " +
             "    bankID INTEGER NOT NULL, " +
-            "    userID INTEGER NOT NULL, " +
+            "    userID INTEGER, " +
             "    FOREIGN KEY (bankID) REFERENCES bank(bankID), " +
             "    FOREIGN KEY (userID) REFERENCES user(userID), " +
             "    UNIQUE (bankID, userID) " +
@@ -74,13 +73,11 @@ public class SQLite {
 
     }
 
-    public static Connection getConnection() {
-        try(Connection conn = DriverManager.getConnection(this.url)){
+    public static Connection getConnection() throws SQLException {
+        Connection conn = DriverManager.getConnection(url);
             if (conn != null) {
                 return conn;
             }
-        } catch(SQLException e ){
-            System.out.println(e);
-        }
+        return null;
     }
 }

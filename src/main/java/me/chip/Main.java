@@ -2,10 +2,14 @@ package me.chip;
 
 //import javafx.application.Application;
 
+import me.chip.bank.ChipBank;
+
 public class Main{
 
     public static void main(String[] args) {
-        String url = "jdbc:sqlite:bank_db.sqlite";
-        SQLite connection = new SQLite();
+
+        SQLite sql = new SQLite();
+        ChipBank bank= new ChipBank();
+        bank.register("Dummy");
     }
 }

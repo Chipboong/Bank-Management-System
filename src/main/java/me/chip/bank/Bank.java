@@ -1,5 +1,7 @@
 package me.chip.bank;
 
+import java.sql.SQLException;
+
 public interface Bank {
     String getBankName();
     String getBankID();
@@ -8,7 +10,7 @@ public interface Bank {
 
     void deposit(Account account, double amount);
 
-    double withdraw(String accountId, double amount);
+    void withdraw(Account account, double amount) throws SQLException;
 
     boolean transfer(
         String fromAccountId,

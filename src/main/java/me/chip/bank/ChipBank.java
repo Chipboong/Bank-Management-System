@@ -3,16 +3,15 @@ package me.chip.bank;
 import me.chip.SQLite;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.lang.Math;
 
 public class ChipBank implements Bank {
 
-    final String bankName;
-    final String bankId;
-    final String url = "jdbc:sqlite:bank_db.sqlite";
-    public ChipBank(String bankName, String bankId) {
-        this.bankName = bankName;
-        this.bankId = bankId;
-    }
+    final String bankName = "ChipBank";
+    final String bankId = "4012";
 
     @Override
     public String getBankName() {
@@ -26,8 +25,26 @@ public class ChipBank implements Bank {
 
     @Override
     public void register(String username) {
-        String reg = "";
+        boolean success = false;
+        while(!success) {
+            int ID = (int) (Math.random() * 1000);
+            try(Connection conn = SQLite.getConnection();
+            Statement stmt = conn.createStatement()){
+                String userReg = "INSERT INTO user VALUES(" + ID + ", \"" + username + "\");";
+                stmt.execute(userReg);
+                String last4ID = Integer.toString(ID);
+                while(last4ID.length() < 4){
+                    last4ID = "0" + last4ID;
+                }
+                String accountReg = "INSERT INTO account(accountID,balance,bankID,userID) VALUES (\'4012"+ last4ID + "\', 0, 4012,"+ID+");";
+                stmt.execute(accountReg);
+                success = true;
+            }catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
 
+        }
+    System.out.println("User Created Successfully!");
     }
 
     @Override
@@ -39,12 +56,14 @@ public class ChipBank implements Bank {
     }
 
     @Override
-    public double withdraw(String accountId, double amount) {
+    public void withdraw(Account account, double amount) throws SQLException{
         // TODO Auto-generated method stub
-       try(Connection conn = SQLite.getConnection()){
-           if (conn != null){
-
-           }
+        double balance = account.getBalance() - amount;
+        account.setBalance(balance);
+       try(Connection conn = SQLite.getConnection();
+           Statement stmt = conn.createStatement()){
+           String sql = "UPDATE account SET balance =" + account.getBalance() + " WHERE accountID = "+ account.getID();
+           stmt.execute(sql);
        }
     }
 
