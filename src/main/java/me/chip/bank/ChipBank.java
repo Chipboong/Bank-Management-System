@@ -65,10 +65,13 @@ public class ChipBank implements Bank {
            String sql = "UPDATE account SET balance =" + account.getBalance() + " WHERE accountID = "+ account.getID();
            stmt.execute(sql);
        }
+//       catch(SQLException e) {
+//           System.out.println(e.getMessage());
+//       }
     }
 
     @Override
-    public boolean transfer(
+    public void transfer(
         String fromAccountId,
         String toAccountId,
         String toBankId,
@@ -87,4 +90,5 @@ public class ChipBank implements Bank {
             "Unimplemented method 'closeAccount'"
         );
     }
+
 }

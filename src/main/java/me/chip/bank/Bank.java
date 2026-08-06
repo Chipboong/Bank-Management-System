@@ -12,7 +12,7 @@ public interface Bank {
 
     void withdraw(Account account, double amount) throws SQLException;
 
-    boolean transfer(
+    void transfer(
         String fromAccountId,
         String toAccountId,
         String toBankId,
