@@ -3,8 +3,10 @@ package me.chip.bank;
 import me.chip.SQLite;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.ResultSet;
 
 import java.lang.Math;
 
@@ -48,27 +50,44 @@ public class ChipBank implements Bank {
     }
 
     @Override
-    public void deposit(Account account, double amount) {
+    public void deposit(String accountID, double amount) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'deposit'"
-        );
+        boolean validID = getUserByID(accountID);
+        if(!validID || amount <= 0){
+            System.out.println("Account NOT found!");
+            return;
+        }
+        String depSQL = "UPDATE account SET balance = balance + ? WHERE accountID = ?;";
+        try(Connection conn = SQLite.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(depSQL)) {
+            pstmt.setDouble(1,amount);
+            pstmt.setString(2,accountID);
+            pstmt.executeUpdate();
+            System.out.println("Deposit Succeed!");
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
-    @Override
-    public void withdraw(Account account, double amount) throws SQLException{
-        // TODO Auto-generated method stub
-        double balance = account.getBalance() - amount;
-        account.setBalance(balance);
-       try(Connection conn = SQLite.getConnection();
-           Statement stmt = conn.createStatement()){
-           String sql = "UPDATE account SET balance =" + account.getBalance() + " WHERE accountID = "+ account.getID();
-           stmt.execute(sql);
-       }
-//       catch(SQLException e) {
-//           System.out.println(e.getMessage());
+//    @Override
+//    public void withdraw(Account account, double amount) throws SQLException{
+//        // TODO Auto-generated method stub
+//        if(account.getBalance() - amount < 0  ){
+//            System.out.println("This amount is sufficient!");
+//            return;
+//        }
+//        double balance = account.getBalance() - amount;
+//       try(Connection conn = SQLite.getConnection();
+//           Statement stmt = conn.createStatement()){
+//           String sql = "UPDATE account SET balance =" + balance + " WHERE accountID = "+ account.getID();
+//           stmt.execute(sql);
 //       }
-    }
+//           account.init();
+////       catch(SQLException e) {
+////           System.out.println(e.getMessage());
+////       }
+//    }
 
     @Override
     public void transfer(
@@ -78,9 +97,10 @@ public class ChipBank implements Bank {
         double amount
     ) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'transfer'"
-        );
+      if (!getUserByID(fromAccountId) || !getUserByID(toAccountId) || amount<= 0) {
+        System.out.println("");
+
+      }
     }
 
     @Override
@@ -89,6 +109,26 @@ public class ChipBank implements Bank {
         throw new UnsupportedOperationException(
             "Unimplemented method 'closeAccount'"
         );
+    }
+
+    public static boolean getUserByID(String ID){
+    String getUserSQL = "SELECT * from account where accountID = ?";
+    try(Connection conn = SQLite.getConnection();
+    PreparedStatement pstmt = conn.prepareStatement(getUserSQL)){
+        pstmt.setString(1,ID);
+      try ( ResultSet rs = pstmt.executeQuery()){
+          while(rs.next()){
+              String accountID = rs.getString("accountID");
+              if (accountID != null) {
+                  return true;
+              }
+          }
+      }
+
+    } catch(SQLException e){
+        System.out.println(e.getMessage());
+    }
+    return false;
     }
 
 }

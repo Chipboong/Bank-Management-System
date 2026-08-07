@@ -2,13 +2,10 @@ package me.chip.bank;
 
 import me.chip.SQLite;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 
 
-public class Account extends ChipBank
+public class Account
 {
     private final String accountHolderName;
     private String accountNumber;
@@ -17,6 +14,7 @@ public class Account extends ChipBank
     public Account(String name, String accountNumber) {
         this.accountHolderName = name;
         this.accountNumber = accountNumber;
+        init();
     }
 
     public String getAccountHolderName(){return this.accountHolderName;}
@@ -35,44 +33,67 @@ public class Account extends ChipBank
         return this.accountNumber;
     }
 
-    public void withdraw(double amount) {
-        if (this.balance - amount > 0) {
-            System.out.println("Insufficient amount");
+//    public void withdraw(double amount) {
+//        if (this.balance - amount > 0) {
+//            System.out.println("Insufficient amount");
+//            return;
+//        }
+//        this.balance -= amount;
+//    }
+
+
+//    public void transfer(Account account, double amount){
+//        if(this.balance - amount < 0 || amount < 0) {
+//            System.out.println("Insufficient Amount Or The amount is invalid!");
+//            return;
+//        }
+//        try(Connection conn = SQLite.getConnection()){
+//            String transferSQL = "UPDATE account SET balance = balance - ? WHERE accountID = ?;" +
+//                    "UPDATE account SET balance = balance + ? WHERE accountID = ?;";
+//            try(PreparedStatement pstmt = conn.prepareStatement(transferSQL)){
+//                //Take the balance from the transferrer
+//                pstmt.setDouble(1,this.balance - amount);
+//                pstmt.setString(2, this.accountNumber);
+//
+//                //put the money from
+//            } catch(SQLException e){
+//                conn.rollback();
+//                System.out.println("The account is not found!");
+//            }
+//        } catch(SQLException e){
+//            System.out.println(e.getMessage());
+//        }
+//    }
+
+    public void withdraw( double amount) throws SQLException{
+
+        if(getBalance() - amount < 0  ){
+            System.out.println("Insufficient Balance!");
             return;
         }
-        this.balance -= amount;
+        double balance = getBalance() - amount;
+        try(Connection conn = SQLite.getConnection();
+            Statement stmt = conn.createStatement()){
+            String sql = "UPDATE account SET balance =" + balance + " WHERE accountID = "+ getID();
+            stmt.execute(sql);
+        }
+        init();
+        System.out.println("Withdraw Succeed!");
     }
 
-
-    public void transfer(Account account, double amount){
-        if(this.balance - amount < 0 || amount < 0) {
-            System.out.println("Insufficient Amount Or The amount is invalid!");
-            return;
-        }
-        try(Connection conn = SQLite.getConnection()){
-            String transferSQL = "UPDATE account SET balance = balance - ? WHERE accountID = ?;" +
-                    "UPDATE account SET balance = balance + ? WHERE accountID = ?;";
-            try(PreparedStatement pstmt = conn.prepareStatement(transferSQL)){
-                //Take the balance from the transferrer
-                pstmt.setDouble(1,this.balance - amount);
-                pstmt.setString(2, this.accountNumber);
-
-                //put the money from
-            } catch(SQLException e){
-                conn.rollback();
-                System.out.println("The account is not found!");
-            }
-        } catch(SQLException e){
+    public void init(){
+         String balanceSQL= "SELECT balance FROM account WHERE accountID = ?";
+         try(Connection conn = SQLite.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(balanceSQL)){
+             pstmt.setString(1,this.accountNumber);
+             try(ResultSet rs = pstmt.executeQuery()){
+                 while(rs.next()){
+                     this.balance = rs.getDouble("balance");
+                 }
+             }
+         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-    }
-
-    private void init(){
-//         String balanceSQL= "SELECT balance FROM account WHERE accountID = \'" + getID()+ "\'";
-//         try(Connection conn = SQLite.getConnection()){
-//             try(Statement pstmt = conn.createStatement(balanceSQL)){
-//             }
-//         }
+         }
     }
 
 }

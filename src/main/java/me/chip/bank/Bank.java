@@ -8,9 +8,9 @@ public interface Bank {
 
     void register(String username);
 
-    void deposit(Account account, double amount);
+    void deposit(String accountID, double amount);
 
-    void withdraw(Account account, double amount) throws SQLException;
+//    void withdraw(Account account, double amount) throws SQLException;
 
     void transfer(
         String fromAccountId,
