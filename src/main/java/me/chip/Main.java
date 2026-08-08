@@ -13,8 +13,13 @@ public class Main{
 
         SQLite sql = new SQLite();
         ChipBank bank= new ChipBank();
-        Account dummy = new Account("40120056");
-        bank.transfer(dummy.getID(),"40120107","4012",1000);
+        Account dummy = new Account("40120107");
+        bank.closeAccount("40120955");
+//        try{dummy.withdraw(100);}
+//        catch(SQLException e){
+//            System.out.println(e.getMessage());
+//        }
+//        bank.transfer(dummy.getID(),"40120107","4012",1000);
 //        try{}
 //      catch(SQLException e){
 //          System.out.println(e.getMessage());

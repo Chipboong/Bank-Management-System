@@ -121,10 +121,19 @@ public class ChipBank implements Bank {
 
     @Override
     public boolean closeAccount(String accountId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException(
-            "Unimplemented method 'closeAccount'"
-        );
+       if(!getUserByID(accountId)){
+           return false;
+       }
+       String closeAccount= "DELETE FROM account WHERE accountID = ?;";
+        try(Connection conn = SQLite.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(closeAccount)){
+            pstmt.setString(1,accountId);
+            pstmt.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     public static boolean getUserByID(String ID){
