@@ -70,25 +70,6 @@ public class ChipBank implements Bank {
 
     }
 
-//    @Override
-//    public void withdraw(Account account, double amount) throws SQLException{
-//        // TODO Auto-generated method stub
-//        if(account.getBalance() - amount < 0  ){
-//            System.out.println("This amount is sufficient!");
-//            return;
-//        }
-//        double balance = account.getBalance() - amount;
-//       try(Connection conn = SQLite.getConnection();
-//           Statement stmt = conn.createStatement()){
-//           String sql = "UPDATE account SET balance =" + balance + " WHERE accountID = "+ account.getID();
-//           stmt.execute(sql);
-//       }
-//           account.init();
-////       catch(SQLException e) {
-////           System.out.println(e.getMessage());
-////       }
-//    }
-
     @Override
     public void transfer(
         String fromAccountId,
@@ -98,8 +79,43 @@ public class ChipBank implements Bank {
     ) {
         // TODO Auto-generated method stub
       if (!getUserByID(fromAccountId) || !getUserByID(toAccountId) || amount<= 0) {
-        System.out.println("");
+            if(amount <= 0) {
+                System.out.println("Please Enter a Valid Amount!");
+                return;
+            }
+          System.out.println("Account Not Found!");
+            return;
 
+      }
+      Account transferrerAcc = new Account(fromAccountId);
+      if(transferrerAcc.getBalance() - amount < 0){
+          System.out.println("Insufficient Amount!");
+          return;
+      }
+      String withdrawSQL = "UPDATE account SET balance = balance - ? WHERE accountID = ?;";
+       String depositSQL = " UPDATE account SET balance = balance + ? WHERE accountID = ?;";
+
+       try(Connection conn = SQLite.getConnection()){
+
+       try(PreparedStatement pstmt = conn.prepareStatement(withdrawSQL)) {
+           pstmt.setDouble(1, amount);
+           pstmt.setString(2, fromAccountId);
+           pstmt.execute();
+       } catch(SQLException e) {
+           conn.rollback();
+       }
+       try(PreparedStatement pstmt = conn.prepareStatement(depositSQL)) {
+           pstmt.setDouble(1, amount);
+           pstmt.setString(2, toAccountId);
+           pstmt.execute();
+       } catch (SQLException e) {
+           conn.rollback();
+       }
+
+          System.out.println("Transfer Succeed!");
+
+          } catch(SQLException e){
+          System.out.println(e.getMessage());
       }
     }
 
