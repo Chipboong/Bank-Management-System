@@ -12,7 +12,7 @@ public class Login extends JFrame implements ActionListener {
         setSize(800, 480);
         setLocation(350, 200);
         ImageIcon bank = new ImageIcon(
-            ClassLoader.getSystemResource("bank.png")
+            ClassLoader.getSystemResource("me.chip/images/bank.png")
         );
         Image bank2 = bank
             .getImage()
