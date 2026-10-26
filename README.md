@@ -1,6 +1,6 @@
 # Bank Management System
 
-A Java-based bank management system built with Maven, SQLite, and JavaFX/Swing UI prototypes. The project currently focuses on the core banking model and database operations for `ChipBank`.
+A Java-based bank management system built with Maven, SQLite, and JavaFX/Swing UI prototypes. The project currently focuses on the core banking model and database operations.
 
 ## What has been implemented
 
@@ -12,7 +12,7 @@ A Java-based bank management system built with Maven, SQLite, and JavaFX/Swing U
   - Account transaction logs
 - Added foreign-key relationships and account uniqueness constraints.
 - Added the `Bank` interface for standard banking operations.
-- Implemented `ChipBank` with:
+- Implemented the bank with:
   - User and account registration
   - Deposits
   - Transfers between accounts
@@ -67,7 +67,7 @@ The application creates the following tables when it starts database initializat
 - `account`: Stores account numbers, balances, bank ownership, and user ownership.
 - `account_log`: Stores deposit, withdrawal, and transfer transaction details with timestamps.
 
-The default `ChipBank` identifier is `4012`. New account numbers use this bank identifier followed by a generated four-digit user number.
+The default `Bank` identifier is `4012`. New account numbers use this bank identifier followed by a generated four-digit user number.
 
 ## Requirements
 
